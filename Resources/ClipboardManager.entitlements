@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Required to simulate keyboard events (⌘V paste) -->
+    <key>com.apple.security.automation.apple-events</key>
+    <true/>
+
+    <!-- Sandboxing disabled so Carbon global hot-keys and CGEvent paste work.
+         If you need App Store distribution, see README for alternative
+         approaches using Accessibility APIs with sandboxing. -->
+    <key>com.apple.security.app-sandbox</key>
+    <false/>
+</dict>
+</plist>

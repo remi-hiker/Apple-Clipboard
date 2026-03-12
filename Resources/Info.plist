@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>ClipboardManager</string>
+
+    <key>CFBundleDisplayName</key>
+    <string>Clipboard Manager</string>
+
+    <key>CFBundleIdentifier</key>
+    <string>com.yourname.ClipboardManager</string>
+
+    <key>CFBundleVersion</key>
+    <string>1</string>
+
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+
+    <key>CFBundleExecutable</key>
+    <string>ClipboardManager</string>
+
+    <key>LSMinimumSystemVersion</key>
+    <string>13.0</string>
+
+    <!-- Run as a menu-bar-only app (no Dock icon) -->
+    <key>LSUIElement</key>
+    <true/>
+
+    <!-- Allow running on Apple Silicon natively -->
+    <key>LSArchitecturePriority</key>
+    <array>
+        <string>arm64</string>
+        <string>x86_64</string>
+    </array>
+
+    <!-- Required for CGEvent paste simulation -->
+    <key>NSAppleEventsUsageDescription</key>
+    <string>Clipboard Manager needs Accessibility access to paste the selected item into the active application.</string>
+
+    <key>NSAccessibilityUsageDescription</key>
+    <string>Clipboard Manager uses Accessibility to simulate ⌘V and paste the chosen clipboard item for you.</string>
+</dict>
+</plist>
