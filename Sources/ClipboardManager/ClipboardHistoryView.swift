@@ -49,11 +49,12 @@ struct ClipboardHistoryView: View {
         .background(VisualEffectView(material: .sidebar, blendingMode: .behindWindow)
             .ignoresSafeArea())
         .cornerRadius(12)
-        // Dismiss on Escape
-        .onKeyPress(.escape) {
-            onDismiss?()
-            return .handled
-        }
+        // Hidden button catches the Escape key on macOS 13+
+        .background(
+            Button("") { onDismiss?() }
+                .keyboardShortcut(.escape, modifiers: [])
+                .hidden()
+        )
         .onAppear { searchFocused = true }
     }
 
@@ -179,7 +180,7 @@ struct ClipboardHistoryView: View {
                 .foregroundColor(.secondary)
             Text(searchText.isEmpty
                  ? "Nothing copied yet"
-                 : "No results for "\(searchText)"")
+                 : "No results for \"\(searchText)\"")
                 .foregroundColor(.secondary)
                 .font(.callout)
         }
