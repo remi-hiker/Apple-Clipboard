@@ -29,7 +29,8 @@ final class ClipboardStore: ObservableObject {
         objectWillChange.send()
     }
 
-    /// Write item contents back to the system clipboard, then simulate ⌘V.
+    /// Write item contents back to the system clipboard.
+    /// The caller is responsible for restoring app focus and triggering simulatePaste().
     func paste(item: ClipboardItem) {
         let pb = NSPasteboard.general
         pb.clearContents()
@@ -47,12 +48,6 @@ final class ClipboardStore: ObservableObject {
             pb.writeObjects(urls as [NSURL])
         case .unknown:
             break
-        }
-
-        // Simulate ⌘V after a brief pause so the previously active app regains
-        // focus first.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-            Self.simulatePaste()
         }
     }
 
@@ -101,7 +96,7 @@ final class ClipboardStore: ObservableObject {
 
     // MARK: - CGEvent paste simulation
 
-    private static func simulatePaste() {
+    static func simulatePaste() {
         // ⌘V: keyDown then keyUp
         let src = CGEventSource(stateID: .hidSystemState)
         let vKeyCode: CGKeyCode = 9  // kVK_ANSI_V = 0x09

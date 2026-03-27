@@ -97,7 +97,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Embed the SwiftUI view
         let hostingView = NSHostingView(
             rootView: ClipboardHistoryView(store: store) { [weak self] in
-                self?.hidePanel()
+                self?.pasteAndHide()
             }
         )
         hostingView.frame = newPanel.contentView?.bounds ?? .zero
@@ -130,6 +130,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         panel?.orderOut(nil)
         previousApp?.activate(options: .activateIgnoringOtherApps)
         previousApp = nil
+    }
+
+    /// Called when the user selects a clipboard item: hides the panel, restores
+    /// focus to the previous app, then simulates ⌘V once focus has transferred.
+    private func pasteAndHide() {
+        panel?.orderOut(nil)
+        let app = previousApp
+        previousApp = nil
+        app?.activate(options: .activateIgnoringOtherApps)
+        // Delay is relative to the activate call so ⌘V lands after focus transfers.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            ClipboardStore.simulatePaste()
+        }
     }
 
     /// Position the panel in the upper-centre of the screen that contains the
