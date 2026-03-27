@@ -20,6 +20,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     // macOS menu-bar status item
     private var statusItem: NSStatusItem?
 
+    // The app that was active before the panel was shown; restored on hide.
+    private var previousApp: NSRunningApplication?
+
     // MARK: - Application lifecycle
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -115,6 +118,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func showPanel() {
+        previousApp = NSWorkspace.shared.frontmostApplication
         guard let panel else { return }
 
         positionPanel()
@@ -124,6 +128,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func hidePanel() {
         panel?.orderOut(nil)
+        previousApp?.activate(options: .activateIgnoringOtherApps)
+        previousApp = nil
     }
 
     /// Position the panel in the upper-centre of the screen that contains the
