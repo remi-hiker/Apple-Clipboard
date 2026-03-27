@@ -23,6 +23,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     // The app that was active before the panel was shown; restored on hide.
     private var previousApp: NSRunningApplication?
 
+    // Onboarding window (shown once on first launch)
+    private var onboardingWindow: NSWindow?
+
+    private static let onboardingKey = "onboardingComplete"
+
     // MARK: - Application lifecycle
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -40,7 +45,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         HotkeyManager.shared.register()
 
-        checkAccessibilityPermission()
+        if !UserDefaults.standard.bool(forKey: Self.onboardingKey) {
+            showOnboarding()
+        }
     }
 
     func applicationWillTerminate(_ notification: Notification) {
@@ -163,33 +170,29 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         panel.setFrameOrigin(NSPoint(x: x, y: y))
     }
 
-    // MARK: - Accessibility check
+    // MARK: - Onboarding
 
-    private func checkAccessibilityPermission() {
-        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue(): true]
-        let trusted = AXIsProcessTrustedWithOptions(options)
-        if !trusted {
-            showAccessibilityAlert()
+    private func showOnboarding() {
+        let window = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 500, height: 400),
+            styleMask: [.titled, .closable, .fullSizeContentView],
+            backing: .buffered,
+            defer: false
+        )
+        window.titlebarAppearsTransparent = true
+        window.titleVisibility = .hidden
+        window.isMovableByWindowBackground = true
+        window.center()
+
+        let rootView = OnboardingView { [weak self, weak window] in
+            UserDefaults.standard.set(true, forKey: Self.onboardingKey)
+            window?.close()
+            self?.onboardingWindow = nil
         }
-    }
-
-    private func showAccessibilityAlert() {
-        let alert = NSAlert()
-        alert.messageText = "Accessibility Access Required"
-        alert.informativeText =
-            "ClipboardManager needs Accessibility access to simulate ⌘V and paste " +
-            "the selected item into the active app.\n\n" +
-            "Please enable it in System Settings → Privacy & Security → Accessibility, " +
-            "then relaunch the app."
-        alert.alertStyle = .warning
-        alert.addButton(withTitle: "Open System Settings")
-        alert.addButton(withTitle: "Later")
-
-        if alert.runModal() == .alertFirstButtonReturn {
-            NSWorkspace.shared.open(
-                URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!
-            )
-        }
+        window.contentView = NSHostingView(rootView: rootView)
+        onboardingWindow = window
+        window.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
     }
 }
 

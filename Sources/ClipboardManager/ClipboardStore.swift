@@ -97,17 +97,20 @@ final class ClipboardStore: ObservableObject {
     // MARK: - CGEvent paste simulation
 
     static func simulatePaste() {
-        // ⌘V: keyDown then keyUp
-        let src = CGEventSource(stateID: .hidSystemState)
+        // ⌘V: keyDown then keyUp.
+        // .combinedSessionState source ensures the event reflects the real
+        // modifier state; .cgSessionEventTap is the correct delivery point
+        // for keyboard events targeting the frontmost application.
+        let src = CGEventSource(stateID: .combinedSessionState)
         let vKeyCode: CGKeyCode = 9  // kVK_ANSI_V = 0x09
 
         if let down = CGEvent(keyboardEventSource: src, virtualKey: vKeyCode, keyDown: true) {
             down.flags = .maskCommand
-            down.post(tap: .cgAnnotatedSessionEventTap)
+            down.post(tap: .cgSessionEventTap)
         }
         if let up = CGEvent(keyboardEventSource: src, virtualKey: vKeyCode, keyDown: false) {
             up.flags = .maskCommand
-            up.post(tap: .cgAnnotatedSessionEventTap)
+            up.post(tap: .cgSessionEventTap)
         }
     }
 }

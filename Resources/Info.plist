@@ -38,11 +38,15 @@
         <string>x86_64</string>
     </array>
 
-    <!-- Required for CGEvent paste simulation -->
-    <key>NSAppleEventsUsageDescription</key>
-    <string>Clipboard Manager needs Accessibility access to paste the selected item into the active application.</string>
-
+    <!-- Privacy usage descriptions shown in System Settings and during App Review -->
     <key>NSAccessibilityUsageDescription</key>
-    <string>Clipboard Manager uses Accessibility to simulate ⌘V and paste the chosen clipboard item for you.</string>
+    <string>Clipboard Manager uses Accessibility to paste your chosen clipboard item directly into the active app — saving you the extra click.</string>
+
+    <key>NSAppleEventsUsageDescription</key>
+    <string>Clipboard Manager needs this to send paste commands to other applications on your behalf.</string>
+
+    <!-- Human Interface Guidelines: copyright shown in the About panel -->
+    <key>NSHumanReadableCopyright</key>
+    <string>Copyright © 2026. All rights reserved.</string>
 </dict>
 </plist>
