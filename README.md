@@ -1,8 +1,8 @@
 # Clipboard Manager for macOS
 
-A macOS clipboard history manager that mirrors the Windows clipboard (⊞+V)
-experience.  Press **⌘⇧:** (Cmd + Shift + Colon) anywhere to open a floating
-panel showing your last 25 copied items, then click any entry to instantly
+* This is a macOS clipboard history manager that mirrors the Windows clipboard (⊞+V)
+experience.
+* Press **⌘⇧:** (Cmd + Shift + Colon) anywhere to open a floating panel showing your last 25 copied items, then click any entry to instantly
 paste it.
 
 ## Features
